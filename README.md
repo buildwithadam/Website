@@ -1,4 +1,4 @@
-# buildwithadam.dev — Portfolio
+# buildwithadam.dev
 
 ## Stack
 - Vite + React 18

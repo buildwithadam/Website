@@ -152,15 +152,15 @@ const GlobalStyles = () => (
     /* Only Packages uses spin */
     .shell-spin { position: relative; }
     .shell-spin::before { content:""; position:absolute; inset:0; border-radius:16px;
-      background: conic-gradient(from 0deg, var(--g-edge), rgba(34,211,238,.35), rgba(232,121,249,.35), var(--g-edge));
-      filter: blur(8px); opacity:.9; animation: shellspin 22s linear infinite; }
+    background: conic-gradient(from 0deg, var(--g-edge), rgba(34,211,238,.35), rgba(232,121,249,.35), var(--g-edge));
+    filter: blur(8px); opacity:.9; animation: shellspin 22s linear infinite; pointer-events: none; z-index: -1; }
     @keyframes shellspin { to { transform: rotate(360deg); } }
 
     /* Everywhere else uses fade */
     .shell-fade { position: relative; }
     .shell-fade::before { content:""; position:absolute; inset:0; border-radius:16px;
-      background: conic-gradient(from 0deg, var(--g-edge), rgba(34,211,238,.35), rgba(232,121,249,.35), var(--g-edge));
-      filter: blur(8px); opacity:.85; animation: shellfade 8s ease-in-out infinite alternate; }
+    background: conic-gradient(from 0deg, var(--g-edge), rgba(34,211,238,.35), rgba(232,121,249,.35), var(--g-edge));
+    filter: blur(8px); opacity:.85; animation: shellfade 8s ease-in-out infinite alternate; pointer-events: none; z-index: -1; }
     @keyframes shellfade { 0% { filter: hue-rotate(0deg) blur(8px); opacity:.6 } 100% { filter: hue-rotate(25deg) blur(10px); opacity:.9 } }
 
     /* subtle header sweep */
@@ -171,10 +171,10 @@ const GlobalStyles = () => (
 
     a.link { position: relative; }
     a.link::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px;
-      background: linear-gradient(90deg, var(--g-edge), rgba(34,211,238,0.6), rgba(232,121,249,0.6));
-      transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
+    background: linear-gradient(90deg, var(--g-edge), rgba(34,211,238,0.6), rgba(232,121,249,0.6));
+    transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
     a.link:hover::after { transform: scaleX(1); }
-  `}</style>
+`}</style>
 );
 
 const BrandBadge = () => (
@@ -198,9 +198,15 @@ const GradientBG = () => (
 function Navbar({ onJump }) {
     const safeJump = (id) => typeof onJump === "function" && onJump(id);
     return (
-        <div className="sticky top-0 z-40 backdrop-blur-xl bg-neutral-950/70 border-b border-white/10 overflow-hidden">
-            <motion.div aria-hidden initial={{ x: "-20%" }} animate={{ x: "20%" }} transition={{ duration: 18, repeat: Infinity, repeatType: "reverse" }} className="absolute inset-x-0 top-0 h-14 pointer-events-none header-sweep" />
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+        <div className="sticky top-0 z-40 backdrop-blur-xl bg-neutral-950/70 border-b border-white/10 overflow-hidden isolate">
+            <motion.div
+                aria-hidden
+                initial={{ x: "-20%" }}
+                animate={{ x: "20%" }}
+                transition={{ duration: 18, repeat: Infinity, repeatType: "reverse" }}
+                className="absolute inset-x-0 top-0 h-14 pointer-events-none header-sweep z-0"
+            />
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="flex items-center justify-between h-14">
                     <button onClick={() => safeJump("home")} aria-label="Home">
                         <BrandBadge />
@@ -211,7 +217,7 @@ function Navbar({ onJump }) {
                                 {n.label}
                             </button>
                         ))}
-                        <a href="#contact" className="rounded-xl px-3 py-2 text-xs font-medium border border-lime-300/40 bg-[color:var(--g-glass)] hover:bg-lime-400/35 backdrop-blur-xl shadow-[0_0_30px_rgba(163,230,53,0.3)]">Start</a>
+                        <a href="#contact" className="relative z-10 rounded-xl px-3 py-2 text-xs font-medium border border-lime-300/40 bg-[color:var(--g-glass)] hover:bg-lime-400/35 backdrop-blur-xl shadow-[0_0_30px_rgba(163,230,53,0.3)]">Start</a>
                     </nav>
                 </div>
             </div>
@@ -719,11 +725,14 @@ export default function AdamParkerPortfolio() {
                     <Contact />
                 </div>
             </main>
-
-            <a href="#contact" className="fixed bottom-6 right-6 rounded-full px-4 py-3 border border-lime-300/40 bg-[color:var(--g-glass)] text-neutral-900 shadow-xl hover:scale-105 transition-transform">
+            <a
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); jump("contact"); }}
+                className="fixed bottom-6 right-6 z-[70] pointer-events-auto rounded-full px-4 py-3 border border-lime-300/40 bg-[color:var(--g-glass)] text-neutral-900 shadow-xl hover:scale-105 transition-transform focus:outline-none focus-visible:ring-2"
+                style={{ outlineColor: "var(--g-edge)" }}
+            >
                 <span className="inline-flex items-center gap-2"><Sparkles className="w-4 h-4" /> Get a quote</span>
             </a>
-
             <Footer />
         </div>
     );
