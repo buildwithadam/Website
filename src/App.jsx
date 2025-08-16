@@ -600,34 +600,68 @@ function About() {
 
 function Contact() {
     const [sent, setSent] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const [type, setType] = useState("");
+
     const nameRef = useRef(null);
     const emailRef = useRef(null);
     const companyRef = useRef(null);
     const detailsRef = useRef(null);
     const deadlineRef = useRef(null);
     const budgetRef = useRef(null);
+    const hpRef = useRef(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const name = nameRef.current?.value?.trim();
-        const email = emailRef.current?.value?.trim();
-        const company = companyRef.current?.value?.trim();
-        const details = detailsRef.current?.value?.trim();
-        if (!name || !email || !type || !details) return;
+        setError("");
+        setSent(false);
 
+        const payload = {
+            name: nameRef.current?.value?.trim(),
+            email: emailRef.current?.value?.trim(),
+            company: companyRef.current?.value?.trim(),
+            type,
+            deadline: deadlineRef.current?.value?.trim(),
+            budget: budgetRef.current?.value?.trim(),
+            details: detailsRef.current?.value?.trim(),
+            hp: hpRef.current?.value?.trim(),
+        };
+
+        if (!payload.name || !payload.email || !payload.type || !payload.details) {
+            setError("Please fill out name, email, service, and details.");
+            return;
+        }
+
+        setLoading(true);
         try {
-            await fetch("/api/subscribe", {
+            try {
+                await fetch("/api/subscribe", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: payload.email, name: payload.name }),
+                });
+            } catch { }
+
+            const r = await fetch("/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, name })
+                body: JSON.stringify(payload),
             });
-        } catch { }
 
-        const subject = encodeURIComponent(`[${type}] ${company ? company + " - " : ""}${name}`);
-        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${company || ""}\nService: ${type}\nDeadline: ${deadlineRef.current?.value || ""}\nBudget: ${budgetRef.current?.value || ""}\n\nDetails:\n${details}`);
-        window.location.href = `mailto:hey@buildwithadam.dev?subject=${subject}&body=${body}`;
-        setSent(true);
+            if (!r.ok) {
+                const data = await r.json().catch(() => ({}));
+                throw new Error(data.error || "Failed to send message.");
+            }
+
+            setSent(true);
+            e.target.reset?.();
+            setType("");
+        } catch (err) {
+            setError(err.message || "Could not send message.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -636,6 +670,14 @@ function Contact() {
                 <h2 className="text-3xl font-bold tracking-tight">Start a project</h2>
                 <p className="mt-2 text-neutral-300">Pick a service and share a quick note. I will reply fast with a plan and quote.</p>
                 <form onSubmit={handleSubmit} className="mt-6 grid gap-4">
+                    <input
+                        ref={hpRef}
+                        name="website"
+                        autoComplete="off"
+                        tabIndex={-1}
+                        aria-hidden="true"
+                        className="hidden"
+                    />
                     <div className="grid sm:grid-cols-2 gap-4">
                         <input ref={nameRef} required placeholder="Name" className="w-full rounded-xl border border-lime-300/40 bg-transparent px-4 py-3" />
                         <input ref={emailRef} required type="email" placeholder="Email" className="w-full rounded-xl border border-lime-300/40 bg-transparent px-4 py-3" />
@@ -658,10 +700,24 @@ function Contact() {
                         <input ref={deadlineRef} placeholder="Ideal deadline" className="w-full rounded-xl border border-lime-300/40 bg-transparent px-4 py-3" />
                         <input ref={budgetRef} placeholder="Budget range" className="w-full rounded-xl border border-lime-300/40 bg-transparent px-4 py-3" />
                     </div>
-                    <button type="submit" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium bg-lime-400/95 text-neutral-900">
-                        <Mail className="w-4 h-4" /> Get a plan and quote
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium bg-lime-400/95 text-neutral-900 disabled:opacity-60"
+                    >
+                        <Mail className="w-4 h-4" />
+                        {loading ? "Sending..." : "Get a plan and quote"}
                     </button>
-                    {sent && <div className="text-sm" style={{ color: "var(--g-edge)" }}>Thanks. Your email client should be open with a prefilled message to hey@buildwithadam.dev.</div>}
+                    {sent && (
+                        <div className="text-sm mt-2" style={{ color: "var(--g-edge)" }}>
+                            Thanks for your message was sent. I’ll reply shortly.
+                        </div>
+                    )}
+                    {error && (
+                        <div className="text-sm mt-2 text-red-400">
+                            {error}
+                        </div>
+                    )}
                 </form>
                 <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
                     <a className="link inline-flex items-center gap-2" href="mailto:hey@buildwithadam.dev"><Mail className="w-4 h-4" /> hey@buildwithadam.dev</a>
