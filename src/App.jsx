@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Analytics } from '@vercel/analytics/react';
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Check, ChevronLeft, ChevronRight, Code2, Github, Globe, Leaf, Linkedin, Mail, MapPin, Server, Sparkles, Wrench, Zap } from "lucide-react";
 
@@ -128,7 +129,7 @@ const GlobalStyles = () => (
         --g-glass: hsla(100, 90%, 55%, 0.32);
         --g-edge: hsla(100, 88%, 62%, 0.55);
         --g-soft: hsla(100, 85%, 70%, 0.18);
-        +  color-scheme: dark; /* render native form popovers (like <select> menus) in dark */
+        color-scheme: dark; /* render native form popovers (like <select> menus) in dark */
     }
     .glass {
         position: relative;
