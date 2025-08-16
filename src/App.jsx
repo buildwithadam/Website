@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Analytics } from "@vercel/analytics/next"
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Check, ChevronLeft, ChevronRight, Code2, Github, Globe, Leaf, Linkedin, Mail, MapPin, Server, Sparkles, Wrench, Zap } from "lucide-react";
 
