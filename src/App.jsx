@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Check, ChevronLeft, ChevronRight, Code2, Github, Globe, Leaf, Linkedin, Mail, MapPin, Server, Sparkles, Wrench, Zap } from "lucide-react";
 
@@ -657,6 +657,7 @@ function Contact() {
             }
 
             setSent(true);
+            window.va?.('event', { name: 'contact_submit', params: { service: type || 'unknown' } });
             e.target.reset?.();
             setType("");
         } catch (err) {
@@ -808,6 +809,7 @@ export default function AdamParkerPortfolio() {
                 <span className="inline-flex items-center gap-2"><Sparkles className="w-4 h-4" /> Get a quote</span>
             </a>
             <Footer />
+            <SpeedInsights />
         </div>
     );
 }
