@@ -125,8 +125,9 @@ const GlobalStyles = () => (
     <style>{`
     :root{
         --g-glass: hsla(100, 90%, 55%, 0.32);
-        --g-edge: hsla(100, 88%, 62%, 0.55); 
+        --g-edge: hsla(100, 88%, 62%, 0.55);
         --g-soft: hsla(100, 85%, 70%, 0.18);
+        +  color-scheme: dark; /* render native form popovers (like <select> menus) in dark */
     }
     .glass {
         position: relative;
@@ -683,16 +684,32 @@ function Contact() {
                         <input ref={emailRef} required type="email" placeholder="Email" className="w-full rounded-xl border border-lime-300/40 bg-transparent px-4 py-3" />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
-                        <select required value={type} onChange={(e) => setType(e.target.value)} className="w-full rounded-xl border border-lime-300/40 bg-transparent px-4 py-3">
-                            <option value="" disabled>Choose a service</option>
-                            <option>Development and integrations</option>
-                            <option>Automation and data</option>
-                            <option>Database and performance</option>
-                            <option>Technical SEO</option>
-                            <option>Local SEO</option>
-                            <option>Marketing consulting</option>
-                            <option>Other</option>
-                        </select>
+                        <div className="relative">
+                            <select
+                                required
+                                value={type}
+                                onChange={(e) => setType(e.target.value)}
+                                className="w-full rounded-xl border border-white/20 bg-neutral-900/80 text-neutral-100 px-4 py-3 pr-9 appearance-none focus:outline-none focus:ring-2 focus:ring-lime-300/50"
+                            >
+                                <option value="" disabled>Choose a service</option>
+                                <option>Development and integrations</option>
+                                <option>Automation and data</option>
+                                <option>Database and performance</option>
+                                <option>Technical SEO</option>
+                                <option>Local SEO</option>
+                                <option>Marketing consulting</option>
+                                <option>Other</option>
+                            </select>
+
+                            {/* arrow */}
+                            <svg
+                                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-70"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                            >
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </div>
+
                         <input ref={companyRef} placeholder="Company (optional)" className="w-full rounded-xl border border-lime-300/40 bg-transparent px-4 py-3" />
                     </div>
                     <textarea ref={detailsRef} required placeholder={type === 'Other' ? 'Tell me what you need' : 'Short description of the task'} rows={5} className="w-full rounded-xl border border-lime-300/40 bg-transparent px-4 py-3" />
