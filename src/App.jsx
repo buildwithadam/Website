@@ -220,6 +220,7 @@ function Navbar({ onJump }) {
                                 {n.label}
                             </button>
                         ))}
+                        <a href="/lab" className="text-neutral-300 hover:text-white transition-colors">Lab</a>
                         <a href="#contact" className="relative z-10 rounded-xl px-3 py-2 text-xs font-medium border border-lime-300/40 bg-[color:var(--g-glass)] hover:bg-lime-400/35 backdrop-blur-xl shadow-[0_0_30px_rgba(163,230,53,0.3)]">Start</a>
                     </nav>
                 </div>
@@ -246,6 +247,9 @@ function Hero({ onJump }) {
                             <button onClick={() => onJump("services")} className="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium border border-lime-300/40 hover:bg-lime-400/20 backdrop-blur-xl">
                                 <Wrench className="w-4 h-4" /> View services
                             </button>
+                            <a href="/lab" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium border border-lime-300/40 hover:bg-lime-400/20 backdrop-blur-xl">
+                                <Sparkles className="w-4 h-4" /> Lab
+                            </a>
                         </div>
                         <div className="mt-10 flex flex-wrap gap-2">
                             {techBadges.map(t => (
@@ -759,7 +763,7 @@ function Footer() {
         <footer className="py-10 border-t border-white/10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="text-sm opacity-80">© {year} Adam Parker · buildwithadam.dev · Built in Sacramento with love <span aria-hidden>♥</span></div>
-                <div className="text-xs opacity-60">Privacy • Terms • Email</div>
+                <div className="text-xs opacity-60">Privacy • Terms • Email • <a href="/lab" className="underline">Lab</a></div>
             </div>
         </footer>
     );
