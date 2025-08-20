@@ -28,7 +28,7 @@ export default async function handler(req, res) {
             })
         });
 
-        // Mailchimp returns 400 if member exists — treat as success for re-marketing capture
+        // Mailchimp returns 400 if member exists; treat as success
         if (r.ok || r.status === 400) {
             return res.status(200).json({ ok: true });
         }
